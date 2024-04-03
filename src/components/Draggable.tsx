@@ -14,8 +14,8 @@ const DraggableCard = ({toDo, index}:IDraggableCard) => {
         {(magic) => (
             <Card
             ref={magic.innerRef}
-            {...magic.dragHandleProps}
-            {...magic.draggableProps}
+              {...magic.dragHandleProps}
+              {...magic.draggableProps}
             >
             {toDo}
             </Card>

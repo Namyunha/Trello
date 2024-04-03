@@ -1,17 +1,29 @@
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import 
+{ 
+  DragDropContext, 
+  Droppable, 
+  Draggable 
+} from 'react-beautiful-dnd';
 import {
   Wrapper,
   Boards,
-  Board,
-  Card } 
+} 
 from "./styles"
-import { DropResult } from 'react-beautiful-dnd';
-import DraggableCard from './components/Draggable';
+import 
+{ 
+  DropResult 
+} from 'react-beautiful-dnd';
 
-let toDos = ["a", "b", "c", "d", "e", "f"];
-
+import 
+{ 
+  useAppSelector 
+} from './app/hook';
+import Board from './components/Board';
 
 function App() {
+  const todos = useAppSelector((state) => state.todos);
+  console.log('todos = ', todos);
+
   const onDragEnd = ({destination, source}: DropResult) => {
     if(!destination){
       return
@@ -19,25 +31,16 @@ function App() {
     if(source?.index === destination?.index) {
         return;
     }
-    let newTodos = [...toDos];
-    let src = newTodos.splice(source.index, 1);
-    newTodos.splice(destination?.index, 0, src[0]);
-    toDos = newTodos;
+    // let newTodos = [...toDos];
+    // let src = newTodos.splice(source.index, 1);
+    // newTodos.splice(destination?.index, 0, src[0]);
+    // toDos = newTodos;
   }
 
   return <DragDropContext onDragEnd={onDragEnd}>
-     <Wrapper>
+      <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => (
-              <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {toDos.map((toDo, index) => (
-                  <DraggableCard key={toDo} toDo={toDo} index={index}/>
-                ))}
-                {magic.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(todos).map(boardId => <Board key={boardId} boardId={boardId} toDos={todos[boardId]} />)}
         </Boards>
       </Wrapper>
   </DragDropContext>
