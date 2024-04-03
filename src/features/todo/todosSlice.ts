@@ -26,16 +26,25 @@ const todosSlice = createSlice({
     reducers: {
         setSameTodos: (state, action)  => {
             let {payload : {destination : {droppableId}, changeTodos}} = action;
-            console.log("droppableId = ", droppableId);
-            console.log("changeTodos = ", changeTodos);
-            
             return {
                 ...state,
                 [droppableId]: changeTodos
             }
         },
+        setCrossTodos: (state, action) => {
+            const {payload, payload : {destination, source, draggableId} } = action
+            let sourceBoard = [...payload[source.droppableId]];
+            sourceBoard.splice(source.index, 1);
+            let destinationBoard = [...payload[destination.droppableId]];
+            destinationBoard.splice(destination.index, 0, draggableId)
+            return {
+                ...state,
+                [source.droppableId]: sourceBoard,
+                [destination.droppableId]: destinationBoard
+            }
+        }
     }
 })
 
-export const { setSameTodos } = todosSlice.actions
+export const { setSameTodos, setCrossTodos } = todosSlice.actions
 export default todosSlice.reducer

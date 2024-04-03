@@ -20,7 +20,8 @@ import
 import Board from './components/Board';
 import 
 { 
-  setSameTodos
+  setSameTodos,
+  setCrossTodos
 } from './features/todo/todosSlice';
 
 function App() {
@@ -29,13 +30,19 @@ function App() {
   const dispatch = useAppDispatch();
 
   const onDragEnd = ( info: DropResult) => {
-    const {destination, draggableId, source} = info;
+    let {destination, draggableId, source} = info;
+
+    if(!destination) return;
+
     if(destination?.droppableId === source.droppableId) {
       let changeTodos = [...todos[destination.droppableId]];
       changeTodos.splice(source.index, 1);
       changeTodos.splice(destination.index, 0, draggableId);
       dispatch(setSameTodos({changeTodos, destination}))
+    }
 
+    if(destination?.droppableId !== source.droppableId) {
+      dispatch(setCrossTodos({...todos, destination, source, draggableId}));
     }
   }
 
