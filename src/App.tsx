@@ -1,8 +1,6 @@
 import 
 { 
   DragDropContext, 
-  Droppable, 
-  Draggable 
 } from 'react-beautiful-dnd';
 import {
   Wrapper,
@@ -16,25 +14,29 @@ import
 
 import 
 { 
-  useAppSelector 
+  useAppSelector,
+  useAppDispatch
 } from './app/hook';
 import Board from './components/Board';
+import 
+{ 
+  setSameTodos
+} from './features/todo/todosSlice';
 
 function App() {
   const todos = useAppSelector((state) => state.todos);
   console.log('todos = ', todos);
+  const dispatch = useAppDispatch();
 
-  const onDragEnd = ({destination, source}: DropResult) => {
-    if(!destination){
-      return
+  const onDragEnd = ( info: DropResult) => {
+    const {destination, draggableId, source} = info;
+    if(destination?.droppableId === source.droppableId) {
+      let changeTodos = [...todos[destination.droppableId]];
+      changeTodos.splice(source.index, 1);
+      changeTodos.splice(destination.index, 0, draggableId);
+      dispatch(setSameTodos({changeTodos, destination}))
+
     }
-    if(source?.index === destination?.index) {
-        return;
-    }
-    // let newTodos = [...toDos];
-    // let src = newTodos.splice(source.index, 1);
-    // newTodos.splice(destination?.index, 0, src[0]);
-    // toDos = newTodos;
   }
 
   return <DragDropContext onDragEnd={onDragEnd}>
