@@ -11,12 +11,12 @@ const DraggableCard = ({toDo, index}:IDraggableCard) => {
     console.log(toDo, "has been rendered");
   return (
     <Draggable key={toDo} draggableId={toDo} index={index}>
-        {(magic) => (
-            <Card
-            ref={magic.innerRef}
-              {...magic.dragHandleProps}
-              {...magic.draggableProps}
-            >
+        {(magic, info) => (
+            <Card $isDraggingOver={info.isDragging}
+              ref={magic.innerRef}
+                {...magic.dragHandleProps}
+                {...magic.draggableProps}
+              >
             {toDo}
             </Card>
         )}
