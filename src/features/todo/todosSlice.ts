@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
-import { current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface ITodosSlice {
     [key: string]: string[];

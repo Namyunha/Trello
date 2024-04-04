@@ -13,8 +13,11 @@ const Board = ({toDos, boardId}:IBoard) => {
     <Wrapper>  
         <Title>{boardId}</Title>
         <Droppable droppableId={boardId}>
-            {(magic) => (
-                <BoardWrapper ref={magic.innerRef} {...magic.droppableProps}>
+            {(magic, info) => (
+                <BoardWrapper 
+                $isDraggingOver={info.isDraggingOver}
+                $isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+                ref={magic.innerRef} {...magic.droppableProps}>
                     {toDos.map((toDo, index)=> (
                     <DraggableCard key={toDo} toDo={toDo} index={index}/>
                     ))}
