@@ -31,18 +31,12 @@ function App() {
 
   const onDragEnd = ( info: DropResult) => {
     let {destination, draggableId, source} = info;
-
     if(!destination) return;
-
     if(destination?.droppableId === source.droppableId) {
-      let changeTodos = [...todos[destination.droppableId]];
-      changeTodos.splice(source.index, 1);
-      changeTodos.splice(destination.index, 0, draggableId);
-      dispatch(setSameTodos({changeTodos, destination}))
+      dispatch(setSameTodos({ todos, source, destination }))
     }
-
     if(destination?.droppableId !== source.droppableId) {
-      dispatch(setCrossTodos({...todos, destination, source, draggableId}));
+      dispatch(setCrossTodos({todos, destination, source, draggableId}));
     }
   }
 

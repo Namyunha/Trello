@@ -1,33 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ITodosSlice {
-    [key: string]: string[];
+    [key: string]: ITodo[];
 }
 
-type ITodosProps  = {
-    destination: locationInfo;
-    draggableId: string;
-    source: locationInfo;
+export interface ITodo {
+    id: number;
+    text: string;
 }
 
-type locationInfo = {
-    droppable: string;
-    index: number;
-}
 
 const todosSlice = createSlice({
     name: 'todos',
     initialState: {
-        Todo: [ "a",  "d", "e" ],
-        doing: [ "b", "c" ],
-        done: [ "f" ]
+        Todo: [{ id:1, text: "hello"}, {id:4, text: "hello4"}],
+        doing: [{id:2, text: "hello2"}],
+        done: [{id:3, text: "hello3"}]
     } as ITodosSlice ,
     reducers: {
         setSameTodos: (state, action)  => {
-            let {payload : {destination : {droppableId}, changeTodos}} = action;
+            const { todos, source: {droppableId, index: sourceIndex}, destination: {index: destinationIndex} } = action.payload
+            let changeTodos = [...todos[droppableId]]
+            let changeTodo = changeTodos.splice(sourceIndex, 1);
+            changeTodos.splice(destinationIndex, 0, changeTodo[0])
             return {
                 ...state,
-                [droppableId]: changeTodos
+                [droppableId] : changeTodos
             }
         },
         setCrossTodos: (state, action) => {
