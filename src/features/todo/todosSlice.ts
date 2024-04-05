@@ -3,12 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 interface ITodosSlice {
     [key: string]: ITodo[];
 }
-
 export interface ITodo {
     id: number;
     text: string;
 }
-
 
 const todosSlice = createSlice({
     name: 'todos',
@@ -19,7 +17,9 @@ const todosSlice = createSlice({
     } as ITodosSlice ,
     reducers: {
         setSameTodos: (state, action)  => {
-            const { todos, source: {droppableId, index: sourceIndex}, destination: {index: destinationIndex} } = action.payload
+            const { todos, 
+                    source: {droppableId, index: sourceIndex}, 
+                    destination: {index: destinationIndex} } = action.payload;
             let changeTodos = [...todos[droppableId]]
             let changeTodo = changeTodos.splice(sourceIndex, 1);
             changeTodos.splice(destinationIndex, 0, changeTodo[0])
@@ -29,15 +29,17 @@ const todosSlice = createSlice({
             }
         },
         setCrossTodos: (state, action) => {
-            const {payload, payload : {destination, source, draggableId} } = action
-            let sourceBoard = [...payload[source.droppableId]];
-            sourceBoard.splice(source.index, 1);
-            let destinationBoard = [...payload[destination.droppableId]];
-            destinationBoard.splice(destination.index, 0, draggableId)
+            const { todos, 
+                destination: { droppableId: destinationId, index: destinationIndex },
+                source: {droppableId: sourceId, index: sourceIndex}} = action.payload;
+            let changeSourceTodos = [...todos[sourceId]]
+            let changeDestinationTodos = [...todos[destinationId]]
+            let changeTodo = changeSourceTodos.splice(sourceIndex, 1);
+            changeDestinationTodos.splice(destinationIndex, 0, changeTodo[0])
             return {
                 ...state,
-                [source.droppableId]: sourceBoard,
-                [destination.droppableId]: destinationBoard
+                [sourceId]: changeSourceTodos,
+                [destinationId]: changeDestinationTodos
             }
         }
     }

@@ -26,17 +26,18 @@ import
 
 function App() {
   const todos = useAppSelector((state) => state.todos);
-  console.log('todos = ', todos);
   const dispatch = useAppDispatch();
-
   const onDragEnd = ( info: DropResult) => {
-    let {destination, draggableId, source} = info;
+    let {destination, source} = info;
+
     if(!destination) return;
+
     if(destination?.droppableId === source.droppableId) {
       dispatch(setSameTodos({ todos, source, destination }))
     }
+
     if(destination?.droppableId !== source.droppableId) {
-      dispatch(setCrossTodos({todos, destination, source, draggableId}));
+      dispatch(setCrossTodos({todos, destination, source}));
     }
   }
 
