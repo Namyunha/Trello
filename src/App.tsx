@@ -25,7 +25,7 @@ import
 } from './features/todo/todosSlice';
 
 function App() {
-  const todos = useAppSelector((state) => state.todos);
+  const todos = useAppSelector((state) => state.todosReducer);
   const dispatch = useAppDispatch();
   const onDragEnd = ( info: DropResult) => {
     let {destination, source} = info;

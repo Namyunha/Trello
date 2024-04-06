@@ -5,6 +5,10 @@ import { colorTheme } from './theme';
 import { GlobalStyle } from './GlobalStyle';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react'
+
+let persistor = persistStore(store)
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,8 +16,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider theme={colorTheme}>
     <Provider store={store}>
-      <GlobalStyle />
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <GlobalStyle />
+        <App />
+      </PersistGate>
     </Provider>
   </ThemeProvider>
 );

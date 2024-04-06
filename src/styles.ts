@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   padding-top: 10px;
-  max-width: 680px;
+  max-width: 70%;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -27,9 +27,10 @@ interface IAreaProps {
 export const BoardWrapper = styled.div<IAreaProps>`
   background-color: ${props => props.$isDraggingOver ? "#dfe6e9" : props.$isDraggingFromThis ? "#b2bec3" : "transparent"};
   border-radius: 5px;
-  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   transition: background-color 0.3s ease-in-out;
-  padding: 20px;
 `;
 
 export const Card = styled.div<{ $isDraggingOver: boolean }>`

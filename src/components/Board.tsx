@@ -1,40 +1,55 @@
 import { Droppable } from "react-beautiful-dnd"
+import { useForm } from 'react-hook-form'
 import styled from "styled-components"
 import DraggableCard from '../components/Draggable'
 import { BoardWrapper } from "../styles"
-import { useRef } from "react";
 import { ITodo } from "../features/todo/todosSlice";
+import { useAppDispatch } from "../app/hook"
+import { v4 as uuidv4 } from "uuid"; // ES Modules
+import { addTodo } from "../features/todo/todosSlice"
 
 interface IBoard {
     toDos: ITodo[]
     boardId: string
 }
 const Board = ({toDos, boardId}:IBoard) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  // 위는 JS에서  document.querySelector 하는 것과 동일하다.
-  const onClick = () => {
-    inputRef.current?.focus();
-    // 위는 react가 아니라 일반 JS를 이용한 것이다.
-    setTimeout(() => {
-      inputRef.current?.blur();
-    }, 5000)
-  };
+  const { register, setValue, handleSubmit, formState : { errors } } = useForm();
+  const dispatch = useAppDispatch();
+  const id = uuidv4();
+  setValue("id", id.substr(0, 4));
+
+  console.log(errors?.title?.message);
+
+  const onSaveHandler = (data:any) => {
+    console.log(data);
+    dispatch(addTodo({data, boardId, toDos}))
+  }
+
   return (
     <Wrapper>  
         <Title>{boardId}</Title>
-        <input ref={inputRef} placeholder="grab me" />
-        <button onClick={onClick}>click me</button>
+        <Form onSubmit={handleSubmit(onSaveHandler)}>
+          <Input {...register("title", 
+            {
+              required: "제목을 입력 해주세요",
+              minLength: {
+                value: 5,
+                message: "5글자 이상 입력해주세요"
+              }
+            })}  placeholder="제목" />
+          {errors?.title && typeof errors.title.message === 'string' && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+
+          <Input {...register("content")} placeholder="내용" />
+          <button>add {boardId}</button>
+        </Form>
         <Droppable droppableId={boardId}>
             {(magic, info) => (
                 <BoardWrapper
                   $isDraggingOver={info.isDraggingOver}
                   $isDraggingFromThis={Boolean(info.draggingFromThisWith)}
                   ref={magic.innerRef} {...magic.droppableProps}>
-                {/* 위는 beautiful-dnd가 HTML 요소에 접근할 수 있어야 한다는 것이다. 
-                beautiful-dnd를 이용해서 transformation을 하고 event listener를 넣고
-                여러가지를 시작하는 트리거 역할을 한다. */}
                     {toDos.map((toDo, index)=> (
-                      <DraggableCard key={toDo.id} toDoId={toDo.id} toDoText={toDo.text} index={index}/>
+                      <DraggableCard key={toDo.id} boardId={boardId} toDoId={toDo.id} toDoTitle={toDo.title} toDoContent={toDo.content} index={index}/>
                     ))}
                     {magic.placeholder}
                 </BoardWrapper>
@@ -43,18 +58,37 @@ const Board = ({toDos, boardId}:IBoard) => {
     </Wrapper>
   )
 }
+const ErrorMessage = styled.span`
+  color: red;
+  font-size: 14px;
+`
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`
+const Input = styled.input`
+  width: 100%;
+  padding: 5px;
+`
+
+
 
 const Title = styled.h2`
   text-align: center;
   font-weight: 600;
-  margin-bottom: 10px;
   font-size: 18px;
 `;
 const Wrapper = styled.div`
-  padding: 20px 10px;
-  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+  padding: 10% 5%;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
-  min-height: 300px;
+  min-height: 30%;
 `;
 export default Board

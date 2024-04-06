@@ -1,21 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 interface ITodosSlice {
     [key: string]: ITodo[];
 }
 export interface ITodo {
     id: number;
-    text: string;
+    title: string;
+    content: string;
 }
 
 const todosSlice = createSlice({
     name: 'todos',
     initialState: {
-        Todo: [{ id:1, text: "hello"}, {id:4, text: "hello4"}],
-        doing: [{id:2, text: "hello2"}],
-        done: [{id:3, text: "hello3"}]
+        Todo: [],
+        doing: [],
+        done: []
     } as ITodosSlice ,
     reducers: {
+        addTodo: (state, action) => {
+            const {data, toDos, boardId} = action.payload
+            console.log("data = ", data);
+            console.log("toDos = ", ...toDos);
+            console.log("boardId = ", boardId)
+            return {
+                ...state,
+                [boardId]: [...toDos, data]
+            }
+        },
+        deleteTodo: (state, action) => {
+            console.log("delete action = ", action.payload);
+            const { boardId, toDoId } = action.payload;
+            let todos = current(state[boardId])
+            return {
+                ...state,
+                [boardId] : todos.filter(todo => todo.id !== toDoId)
+            }
+        },
         setSameTodos: (state, action)  => {
             const { todos, 
                     source: {droppableId, index: sourceIndex}, 
@@ -45,5 +65,5 @@ const todosSlice = createSlice({
     }
 })
 
-export const { setSameTodos, setCrossTodos } = todosSlice.actions
+export const { setSameTodos, setCrossTodos, addTodo, deleteTodo } = todosSlice.actions
 export default todosSlice.reducer
