@@ -36,6 +36,17 @@ const todosSlice = createSlice({
                 [boardId] : todos.filter(todo => todo.id !== toDoId)
             }
         },
+        trashTodo: (state, action) => {
+            const {index, droppableId:boardId} = action.payload;
+            let todos = current(state[boardId]);
+            console.log( todos.filter((item, i) => i !== index) );
+ 
+            console.log("index = ", index," /  id = ", boardId);
+            return { 
+                ...state,
+                [boardId] : todos.filter((item, i) => i !== index)
+            }
+        },
         setSameTodos: (state, action)  => {
             const { todos, 
                     source: {droppableId, index: sourceIndex}, 
@@ -65,5 +76,5 @@ const todosSlice = createSlice({
     }
 })
 
-export const { setSameTodos, setCrossTodos, addTodo, deleteTodo } = todosSlice.actions
+export const { setSameTodos, setCrossTodos, addTodo, deleteTodo, trashTodo } = todosSlice.actions
 export default todosSlice.reducer

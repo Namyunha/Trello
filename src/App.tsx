@@ -21,16 +21,25 @@ import Board from './components/Board';
 import 
 { 
   setSameTodos,
-  setCrossTodos
+  setCrossTodos,
+  trashTodo
 } from './features/todo/todosSlice';
 
+import styled from 'styled-components';
+
+import { Droppable } from 'react-beautiful-dnd';
 function App() {
   const todos = useAppSelector((state) => state.todosReducer);
   const dispatch = useAppDispatch();
   const onDragEnd = ( info: DropResult) => {
     let {destination, source} = info;
-
+    
     if(!destination) return;
+
+    if(destination?.droppableId === "TrashCan"){
+      dispatch(trashTodo(source));
+      return ;
+    }
 
     if(destination?.droppableId === source.droppableId) {
       dispatch(setSameTodos({ todos, source, destination }))
@@ -45,9 +54,22 @@ function App() {
       <Wrapper>
         <Boards>
           {Object.keys(todos).map(boardId => <Board key={boardId} boardId={boardId} toDos={todos[boardId]} />)}
+          <Droppable droppableId="TrashCan">
+            {(magic, info) => (
+              <TrashCan ref={magic.innerRef} {...magic.droppableProps}>
+                나는 휴지통
+              </TrashCan>
+            )}
+          </Droppable>
         </Boards>
       </Wrapper>
   </DragDropContext>
 }
+
+const TrashCan = styled.div`
+  height: 100px;
+  background-color: tomato; /* backgroundColor 대신 background-color 사용 */
+`;
+
 
 export default App;
