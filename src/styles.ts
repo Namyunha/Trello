@@ -16,9 +16,10 @@ export const Boards = styled.div`
   display: flex;
   width: 100%;
   gap: 10px;
+  margin-bottom: 20px
 `;
 
-interface IAreaProps {
+export interface IAreaProps {
   $isDraggingFromThis: boolean;
   $isDraggingOver: boolean;
 }
@@ -37,6 +38,8 @@ export const Card = styled.div<{ $isDraggingOver: boolean }>`
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 10px 10px;
+  opacity: ${(props) =>
+    props.$isDraggingOver ? 0.5 : 1};
   background-color: ${(props) =>
     props.$isDraggingOver ? "#74b9ff" : props.theme.cardColor};
   box-shadow: ${props => 

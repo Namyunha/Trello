@@ -27,9 +27,19 @@ import
 
 import { FaTrash } from "react-icons/fa6";
 
+import { FaTrashRestoreAlt } from "react-icons/fa";
+
 import styled from 'styled-components';
 
 import { Droppable } from 'react-beautiful-dnd';
+
+
+export interface IAreaProps {
+  $isDraggingFromThis: boolean;
+  $draggingOverWith: boolean;
+  $isDraggingOver: boolean;
+}
+
 function App() {
   const todos = useAppSelector((state) => state.todosReducer);
   const dispatch = useAppDispatch();
@@ -59,8 +69,9 @@ function App() {
         </Boards>
         <Droppable droppableId="TrashCan">
           {(magic, info) => (
-            <TrashCan ref={magic.innerRef} {...magic.droppableProps}>
-              <FaTrash />
+            <TrashCan ref={magic.innerRef} {...magic.droppableProps}  $isDraggingOver={info.isDraggingOver} $draggingOverWith={Boolean(info.draggingOverWith)} $isDraggingFromThis={Boolean(info.draggingFromThisWith)}>
+              {Boolean(info.draggingOverWith) ? <FaTrashRestoreAlt /> : <FaTrash /> }
+            
             </TrashCan>
           )}
         </Droppable>
@@ -68,13 +79,15 @@ function App() {
   </DragDropContext>
 }
 
-const TrashCan = styled.div`
+const TrashCan = styled.div<IAreaProps>`
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 40px;
   padding: 10px;
-  background-color: tomato; /* backgroundColor 대신 background-color 사용 */
+  color: ${(props) =>
+    props.$draggingOverWith ? "white" : "black"};
+  transition: all 0.5s
 `;
 
 
