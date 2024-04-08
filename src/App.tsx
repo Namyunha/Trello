@@ -25,6 +25,8 @@ import
   trashTodo
 } from './features/todo/todosSlice';
 
+import { FaTrash } from "react-icons/fa6";
+
 import styled from 'styled-components';
 
 import { Droppable } from 'react-beautiful-dnd';
@@ -54,20 +56,24 @@ function App() {
       <Wrapper>
         <Boards>
           {Object.keys(todos).map(boardId => <Board key={boardId} boardId={boardId} toDos={todos[boardId]} />)}
-          <Droppable droppableId="TrashCan">
-            {(magic, info) => (
-              <TrashCan ref={magic.innerRef} {...magic.droppableProps}>
-                나는 휴지통
-              </TrashCan>
-            )}
-          </Droppable>
         </Boards>
+        <Droppable droppableId="TrashCan">
+          {(magic, info) => (
+            <TrashCan ref={magic.innerRef} {...magic.droppableProps}>
+              <FaTrash />
+            </TrashCan>
+          )}
+        </Droppable>
       </Wrapper>
   </DragDropContext>
 }
 
 const TrashCan = styled.div`
-  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  padding: 10px;
   background-color: tomato; /* backgroundColor 대신 background-color 사용 */
 `;
 

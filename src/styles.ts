@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   padding-top: 10px;
   max-width: 70%;
   width: 100%;
@@ -12,9 +13,8 @@ export const Wrapper = styled.div`
 `;
 
 export const Boards = styled.div`
-  display: grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 `;
 
