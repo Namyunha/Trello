@@ -5,9 +5,20 @@ import DraggableCard from '../components/Draggable'
 import { BoardWrapper } from "../styles"
 import { ITodo } from "../features/todo/todosSlice";
 import { useAppDispatch } from "../app/hook"
-import { v4 as uuidv4 } from "uuid"; // ES Modules
-import { addTodo } from "../features/todo/todosSlice"
-import { deleteBd } from "../features/todo/todosSlice"
+import { v4 as uuidv4 } from "uuid";
+import { BoardFormWrapper } from "../styles"
+import 
+{ BoardTitle,
+  BoardForm,
+  BoardFormInput
+} from "../styles"
+
+import 
+{ addTodo,
+  deleteBd 
+} from "../features/todo/todosSlice"
+
+import { ErrorMessage } from "../styles"
 
 interface IBoard {
     toDos: ITodo[]
@@ -23,7 +34,6 @@ const Board = ({toDos, boardId}:IBoard) => {
   console.log(errors?.title?.message);
 
   const onSaveHandler = (data:any) => {
-    console.log(data);
     dispatch(addTodo({data, boardId, toDos}))
   }
 
@@ -32,13 +42,13 @@ const Board = ({toDos, boardId}:IBoard) => {
   }
 
   return (
-    <Wrapper>
+    <BoardFormWrapper>
         <div>
           <button onClick={deleteBoard}>X</button>
         </div>
-        <Title>{boardId}</Title>
-        <Form onSubmit={handleSubmit(onSaveHandler)}>
-          <Input {...register("title", 
+        <BoardTitle>{boardId}</BoardTitle>
+        <BoardForm onSubmit={handleSubmit(onSaveHandler)}>
+          <BoardFormInput {...register("title", 
             {
               required: "제목을 입력 해주세요",
               minLength: {
@@ -48,9 +58,9 @@ const Board = ({toDos, boardId}:IBoard) => {
             })}  placeholder="제목" />
           {errors?.title && typeof errors.title.message === 'string' && <ErrorMessage>{errors.title.message}</ErrorMessage>}
 
-          <Input {...register("content")} placeholder="내용" />
-          <button>add {boardId}</button>
-        </Form>
+          <BoardFormInput {...register("content")} placeholder="내용" />
+          <button>저장하기</button>
+        </BoardForm>
         <Droppable droppableId={boardId}>
             {(magic, info) => (
                 <BoardWrapper
@@ -64,40 +74,8 @@ const Board = ({toDos, boardId}:IBoard) => {
                 </BoardWrapper>
             )}
         </Droppable>
-    </Wrapper>
+    </BoardFormWrapper>
   )
 }
-const ErrorMessage = styled.span`
-  color: red;
-  font-size: 14px;
-`
 
-const Form = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`
-const Input = styled.input`
-  width: 100%;
-  padding: 5px;
-`
-
-
-
-const Title = styled.h2`
-  text-align: center;
-  font-weight: 600;
-  font-size: 18px;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 20px;
-  padding: 10% 5%;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 5px;
-  min-height: 30%;
-`;
 export default Board

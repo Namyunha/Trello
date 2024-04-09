@@ -3,7 +3,7 @@ import
   DragDropContext, 
 } from 'react-beautiful-dnd';
 import {
-  Wrapper,
+  AppWrapper,
   Boards,
 } 
 from "./styles"
@@ -26,22 +26,11 @@ import
 } from './features/todo/todosSlice';
 
 import { FaTrash } from "react-icons/fa6";
-
 import { FaTrashRestoreAlt } from "react-icons/fa";
-
-import styled from 'styled-components';
-
 import { Droppable } from 'react-beautiful-dnd';
-
-import {useForm} from 'react-hook-form'
-
+import { useForm } from 'react-hook-form'
 import { addBoard } from './features/todo/todosSlice';
-
-export interface IAreaProps {
-  $isDraggingFromThis: boolean;
-  $draggingOverWith: boolean;
-  $isDraggingOver: boolean;
-}
+import { TrashCan, BoardAddFormArea } from './styles';
 
 function App() {
   const { register, handleSubmit, formState: {errors} } = useForm();
@@ -51,58 +40,47 @@ function App() {
     let {destination, source} = info;
     
     if(!destination) return;
-
     if(destination?.droppableId === "TrashCan"){
       dispatch(trashTodo(source));
       return ;
     }
-
     if(destination?.droppableId === source.droppableId) {
       dispatch(setSameTodos({ todos, source, destination }))
     }
-
     if(destination?.droppableId !== source.droppableId) {
       dispatch(setCrossTodos({todos, destination, source}));
     }
   }
-
   const onValid = ({boardId}: any) => {
     dispatch(addBoard(boardId));
   }
 
   return <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <div>
+      <AppWrapper>
+        <BoardAddFormArea>
           Board 만들기
           <form onSubmit={handleSubmit(onValid)}>
             <input {...register("boardId")} type="text" />
             <button>만들기</button>
           </form>
-        </div>
+        </BoardAddFormArea>
         <Boards>
           {Object.keys(todos).map(boardId => <Board key={boardId} boardId={boardId} toDos={todos[boardId]} />)}
         </Boards>
         <Droppable droppableId="TrashCan">
           {(magic, info) => (
-            <TrashCan ref={magic.innerRef} {...magic.droppableProps}  $isDraggingOver={info.isDraggingOver} $draggingOverWith={Boolean(info.draggingOverWith)} $isDraggingFromThis={Boolean(info.draggingFromThisWith)}>
+            <TrashCan ref={magic.innerRef} 
+            {...magic.droppableProps}  
+            $isDraggingOver={info.isDraggingOver} 
+            $draggingOverWith={Boolean(info.draggingOverWith)} 
+            $isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+            >
               {Boolean(info.draggingOverWith) ? <FaTrashRestoreAlt /> : <FaTrash /> }
-            
             </TrashCan>
           )}
         </Droppable>
-      </Wrapper>
+      </AppWrapper>
   </DragDropContext>
 }
-
-const TrashCan = styled.div<IAreaProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 40px;
-  padding: 10px;
-  color: ${(props) =>
-    props.$draggingOverWith ? "white" : "black"};
-  transition: all 0.5s
-`;
 
 export default App;

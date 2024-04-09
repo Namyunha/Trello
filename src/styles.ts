@@ -1,47 +1,76 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 10px;
-  max-width: 70%;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-
-export const Boards = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 10px;
-  margin-bottom: 20px
-`;
+// interface
 
 export interface IAreaProps {
   $isDraggingFromThis: boolean;
   $isDraggingOver: boolean;
 }
+export interface TrashCanProps {
+  $isDraggingFromThis: boolean;
+  $draggingOverWith: boolean;
+  $isDraggingOver: boolean;
+}
 
 
-export const BoardWrapper = styled.div<IAreaProps>`
-  background-color: ${props => props.$isDraggingOver ? "#dfe6e9" : props.$isDraggingFromThis ? "#b2bec3" : "transparent"};
-  border-radius: 5px;
+// styled Components
+
+// App.tsx
+export const AppWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10%;
+  align-items: center;
+`;
+
+export const BoardAddFormArea = styled.div`
+`
+export const Boards = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3%;
+  padding: 0% 5%;
+  max-width: 70%;
+`;
+export const TrashCan = styled.div<TrashCanProps>`
+`;
+
+
+// Board.tsx
+export const BoardFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  gap: 10px;
+  padding: 20px;
+`;
+
+export const BoardTitle = styled.h2`
+`;
+
+export const BoardForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: background-color 0.3s ease-in-out;
+`
+
+export const BoardFormInput = styled.input`
+  
+`
+
+export const BoardWrapper = styled.div<IAreaProps>`
 `;
 
+// Draggable.tsx
 export const Card = styled.div<{ $isDraggingOver: boolean }>`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 10px 10px;
-  opacity: ${(props) =>
-    props.$isDraggingOver ? 0.5 : 1};
-  background-color: ${(props) =>
-    props.$isDraggingOver ? "#74b9ff" : props.theme.cardColor};
-  box-shadow: ${props => 
-  props.$isDraggingOver ? '0px 2px 10px rgba(0, 0, 0, 0.05)' : "none"}
 `;
+
+export const ErrorMessage = styled.span`
+color: red;
+font-size: 14px;
+`
+
