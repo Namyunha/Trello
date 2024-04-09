@@ -4,7 +4,7 @@ import { createSlice, current } from "@reduxjs/toolkit"
 
 const boardsReducer = createSlice({
     name: "boards",
-    initialState: [0, 1, 2],
+    initialState: [] as number[],
     reducers: {
         addBoards: (state, action) => {
             console.log("boardSLice action = ", action)

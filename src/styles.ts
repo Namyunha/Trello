@@ -37,6 +37,10 @@ export const Boards = styled.div`
   max-width: 70%;
 `;
 export const TrashCan = styled.div<TrashCanProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
   width: 100px;
   height: 100px;
   background-color: tomato;

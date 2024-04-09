@@ -12,17 +12,7 @@ export interface ITodo {
 
 const todosSlice = createSlice({
     name: 'todos',
-    initialState: {
-        0 : { name: "Todo", todos: [
-            {id: "1", title: "예시제목1", content: "예시내용1"}
-        ]},
-        1 : { name: "doing", todos: [
-            {id: "2", title: "예시제목2", content: "예시내용2"}
-        ]},
-        2 : { name: "done", todos: [
-            {id: "3", title: "예시제목3", content: "예시내용3"}
-        ]},
-    } as ITodosSlice ,
+    initialState: {} as ITodosSlice ,
     reducers: {
         addBoard: (state, action) => {
             console.log(action.payload)
