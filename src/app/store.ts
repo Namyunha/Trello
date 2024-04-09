@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import todosReducer from "../features/todo/todosSlice";
+import boardsReducer from "../features/board/boardSlice";
 
 import {
     persistReducer,
@@ -13,7 +14,8 @@ import {
   import storage from 'redux-persist/lib/storage'
 
   const rootReducer = combineReducers({
-    todosReducer
+    todosReducer,
+    boardsReducer
   })
 
   const persistConfig = {

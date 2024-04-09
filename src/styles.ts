@@ -37,6 +37,9 @@ export const Boards = styled.div`
   max-width: 70%;
 `;
 export const TrashCan = styled.div<TrashCanProps>`
+  width: 100px;
+  height: 100px;
+  background-color: tomato;
 `;
 
 

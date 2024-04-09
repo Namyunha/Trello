@@ -2,11 +2,10 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd"
 import { Card } from "../styles"
 import { useAppDispatch } from "../app/hook";
-import { deleteTodo } from "../features/todo/todosSlice";
 
 
 interface IDraggableCard {
-    toDoId: number;
+    toDoId: string;
     toDoTitle: string;
     toDoContent: string;
     boardId: string
@@ -15,12 +14,8 @@ interface IDraggableCard {
 
 const DraggableCard = ({toDoId, toDoTitle, toDoContent, index, boardId}:IDraggableCard) => {
     const dispatch = useAppDispatch();
-
     console.log(toDoId, "has been rendered");
 
-    const onDeleteHandler = () => {
-      dispatch(deleteTodo({boardId, toDoId}))
-    }
 
   return (
     <Draggable key={toDoId} draggableId={toDoId + ""} index={index}>
@@ -33,7 +28,6 @@ const DraggableCard = ({toDoId, toDoTitle, toDoContent, index, boardId}:IDraggab
             title:&nbsp;{toDoTitle} <br />
             content:&nbsp;{toDoContent} <br />
             <button>update</button>
-            <button onClick={onDeleteHandler}>delete</button>
             </Card>
         )}
     </Draggable>
