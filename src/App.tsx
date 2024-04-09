@@ -33,6 +33,9 @@ import styled from 'styled-components';
 
 import { Droppable } from 'react-beautiful-dnd';
 
+import {useForm} from 'react-hook-form'
+
+import { addBoard } from './features/todo/todosSlice';
 
 export interface IAreaProps {
   $isDraggingFromThis: boolean;
@@ -41,6 +44,7 @@ export interface IAreaProps {
 }
 
 function App() {
+  const { register, handleSubmit, formState: {errors} } = useForm();
   const todos = useAppSelector((state) => state.todosReducer);
   const dispatch = useAppDispatch();
   const onDragEnd = ( info: DropResult) => {
@@ -62,8 +66,19 @@ function App() {
     }
   }
 
+  const onValid = ({boardId}: any) => {
+    dispatch(addBoard(boardId));
+  }
+
   return <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
+        <div>
+          Board 만들기
+          <form onSubmit={handleSubmit(onValid)}>
+            <input {...register("boardId")} type="text" />
+            <button>만들기</button>
+          </form>
+        </div>
         <Boards>
           {Object.keys(todos).map(boardId => <Board key={boardId} boardId={boardId} toDos={todos[boardId]} />)}
         </Boards>
@@ -89,6 +104,5 @@ const TrashCan = styled.div<IAreaProps>`
     props.$draggingOverWith ? "white" : "black"};
   transition: all 0.5s
 `;
-
 
 export default App;

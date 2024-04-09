@@ -7,11 +7,13 @@ import { ITodo } from "../features/todo/todosSlice";
 import { useAppDispatch } from "../app/hook"
 import { v4 as uuidv4 } from "uuid"; // ES Modules
 import { addTodo } from "../features/todo/todosSlice"
+import { deleteBd } from "../features/todo/todosSlice"
 
 interface IBoard {
     toDos: ITodo[]
     boardId: string
 }
+
 const Board = ({toDos, boardId}:IBoard) => {
   const { register, setValue, handleSubmit, formState : { errors } } = useForm();
   const dispatch = useAppDispatch();
@@ -25,8 +27,15 @@ const Board = ({toDos, boardId}:IBoard) => {
     dispatch(addTodo({data, boardId, toDos}))
   }
 
+  const deleteBoard = () => {
+    dispatch(deleteBd(boardId))
+  }
+
   return (
-    <Wrapper>  
+    <Wrapper>
+        <div>
+          <button onClick={deleteBoard}>X</button>
+        </div>
         <Title>{boardId}</Title>
         <Form onSubmit={handleSubmit(onSaveHandler)}>
           <Input {...register("title", 

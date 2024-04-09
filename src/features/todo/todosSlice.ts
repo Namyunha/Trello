@@ -17,11 +17,20 @@ const todosSlice = createSlice({
         done: []
     } as ITodosSlice ,
     reducers: {
+        addBoard: (state, action) => {
+            console.log(action.payload)
+            return {
+                ...state,
+                [action.payload]: []
+            }
+        },
+        deleteBd: (state, action) => {
+            let nBoards = {...current(state)};
+            delete nBoards[action.payload];
+            return nBoards
+        },
         addTodo: (state, action) => {
             const {data, toDos, boardId} = action.payload
-            console.log("data = ", data);
-            console.log("toDos = ", ...toDos);
-            console.log("boardId = ", boardId)
             return {
                 ...state,
                 [boardId]: [...toDos, data]
@@ -40,7 +49,6 @@ const todosSlice = createSlice({
             const {index, droppableId:boardId} = action.payload;
             let todos = current(state[boardId]);
             console.log( todos.filter((item, i) => i !== index) );
- 
             console.log("index = ", index," /  id = ", boardId);
             return { 
                 ...state,
@@ -76,5 +84,14 @@ const todosSlice = createSlice({
     }
 })
 
-export const { setSameTodos, setCrossTodos, addTodo, deleteTodo, trashTodo } = todosSlice.actions
+export const 
+{ 
+setSameTodos,
+setCrossTodos,
+addTodo,
+deleteTodo,
+trashTodo,
+addBoard,
+deleteBd
+} = todosSlice.actions
 export default todosSlice.reducer
