@@ -48,7 +48,6 @@ const Board = ({toDos, boardId, idx, todosId}:IBoard) => {
   return (
     <Draggable draggableId={boardId} index={idx}>
     {magic => (
-      <div>
         <BoardFormWrapper
           ref={magic.innerRef}
           {...magic.draggableProps}
@@ -72,7 +71,6 @@ const Board = ({toDos, boardId, idx, todosId}:IBoard) => {
             <BoardFormInput {...register("content")} placeholder="내용" />
             <button>저장하기</button>
           </BoardForm>
-        </BoardFormWrapper>
         <Droppable droppableId={boardId} type="todos">
           {(magic, info) => (
             <div>
@@ -90,7 +88,7 @@ const Board = ({toDos, boardId, idx, todosId}:IBoard) => {
             </div>
           )}
         </Droppable>
-      </div>
+        </BoardFormWrapper>
     )}
     </Draggable>
   )
